@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Employee Details</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="container">
+      <h3><a href="/employees" class="btn-primary">Employee List</a></h3>
+      <h1>Employee Details</h1>
+      <div class="employee-detail">
+        <table>
+          <tbody>
+            <tr>
+              <td>Full Name:</td>
+              <td><strong><%= employee.name %></strong></td>
+            </tr>
+            <tr>
+              <td>Address:</td>
+              <td><%= employee.address %></td>
+            </tr>
+            <tr>
+              <td>Position:</td>
+              <td><%= employee.position %></td>
+            </tr>
+            <tr>
+              <td>Annual Salary:</td>
+              <td><strong>$<%= employee.salary ? employee.salary.toLocaleString() : 'N/A' %>/year</strong></td>
+            </tr>
+            <tr>
+              <td>Last Updated:</td>
+              <td><%= employee.update_at ? new Date(employee.update_at).toLocaleDateString() : 'N/A' %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <h3><a href="/employees/edit/<%= employee._id%>" class="btn-success">Edit Employee</a></h3>
+        <form action="/employees/delete/<%= employee._id%>" method="post" style="display: inline;">
+          <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this employee?')">Delete Employee</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
