@@ -12,6 +12,17 @@ var app = express();
 
 var mongoose = require('mongoose');
 
+// MongoDB connection
+const uri = process.env.MONGODB_URI || "mongodb+srv://maazures_db_user:73QWsN09gHZwj7mk@expressdb.lywqzch.mongodb.net/?retryWrites=true&w=majority&appName=expressdb";
+
+// Connect to MongoDB with connection pooling for serverless
+mongoose.connect(uri, {
+  serverSelectionTimeoutMS: 5000,
+}).then(() => {
+  console.log("Connected to MongoDB");
+}).catch((error) => {
+  console.error("MongoDB connection error:", error);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,23 +54,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
-
-
-const uri =
-  "mongodb+srv://maazures_db_user:73QWsN09gHZwj7mk@expressdb.lywqzch.mongodb.net/?retryWrites=true&w=majority&appName=expressdb";
-
-async function connect() {
-  try {
-    await mongoose.connect(uri);
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.error(error);
-  }
+// Only start server if not in production (local development)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+  });
 }
 
-connect();
-
-app.listen(8000, () => {
-  console.log("Server started on port 8000");
-});
+module.exports = app;
